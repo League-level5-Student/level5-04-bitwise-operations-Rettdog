@@ -1,6 +1,6 @@
 package _00_Binary_Conversion;
 
-public class Decimal_To_Binary {
+public class DecimalToBinary {
 	public static void main(String[] args) {
 		//Converting a decimal number to binary is a little trickier.
 		
