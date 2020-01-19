@@ -69,8 +69,14 @@ public class Base64DecoderTester {
 			BufferedReader br = new BufferedReader(new FileReader("src/_04_Base64_Decoder/decoded_string.txt"));
 			String line = br.readLine();
 			int ctr = 0;
+			
 			while (line != null) {
+//				System.out.println("break: "+ctr);
+//				System.out.println(bits[ctr]);
+//				System.out.println(Byte.parseByte(line));
+				System.out.println(ctr);
 				assertEquals(bits[ctr++], Byte.parseByte(line));
+				
 				line = br.readLine();
 			}
 			br.close();

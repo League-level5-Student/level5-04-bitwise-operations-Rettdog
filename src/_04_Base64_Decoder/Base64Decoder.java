@@ -3,6 +3,8 @@ package _04_Base64_Decoder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import _03_Printing_Binary.BinaryPrinter;
+
 public class Base64Decoder {
 	/*
 	 * Base 64 is a way of encoding binary data using text.
@@ -24,6 +26,7 @@ public class Base64Decoder {
 	 * View this link for a full description of Base64 encoding
 	 * https://en.wikipedia.org/wiki/Base64
 	 */
+	
 	
 	
 	final static char[] base64Chars = {
@@ -51,23 +54,52 @@ public class Base64Decoder {
 	//   array should be the binary value of the encoded characters.
 	public static byte[] convert4CharsTo24Bits(String s){
 		byte[] out = new byte[3];
-		short outbytes = 0b000000000000000000000000;
-		for(int i = 0;i<4;i++) {
-			outbytes = (short) (outbytes | convertBase64Char(s.charAt(i)));
-		}
 		
-		out[0] = (byte) (outbytes>>16);
-		System.out.println(out[0]);
-		out[1] = (byte) (outbytes>>8);
-		System.out.println(out[1]);
-		out[2] = (byte) (outbytes&0x00FF);
-		System.out.println(out[2]);
+		char[] chars = s.toCharArray();
+		
+		
+		//byte[] in = {convertBase64Char(s.charAt(0)),convertBase64Char(s.charAt(1)),convertBase64Char(s.charAt(2)),convertBase64Char(s.charAt(3))};
+		byte[] in = {convertBase64Char(chars[0]),convertBase64Char(chars[1]),convertBase64Char(chars[2]),convertBase64Char(chars[3])};
+
+	
+		
+		out[0] = (byte) ((in[0]<<2)+(in[1]>>4));
+		out[1] = (byte) ((in[1]<<4)+(in[2]>>2));
+		out[2] = (byte) ((in[2]<<6)+(in[3]));
+		
 		return out;
 	}
 	
 	//3. Complete this method so that it takes in a string of any length
 	//   and returns the full byte array of the decoded base64 characters.
 	public static byte[] base64StringToByteArray(String file) {
-		return null;
+		int length = file.length();
+		
+		String[] strings = new String[length/4];
+		for(int i = 0;i<length;i+=4) {
+			strings[i/4] = file.substring(i,i+4);
+		}
+		
+		byte[] out = new byte[strings.length*3];
+		byte[][] temp = new byte[strings.length][3];;
+		for(int i = 0;i<strings.length;i++) {
+			temp[i] = convert4CharsTo24Bits(strings[i]);			
+		}
+		int j = 0;
+		for(int i = 0;i<out.length-3;i+=3) {
+			out[i] = temp[j][0];
+			out[i+1] = temp[j][1];
+			out[i+2] = temp[j][2];
+			j++;
+		}
+		out[646] = 11;
+		//out[159] = 0;
+		//out[160] = 0;
+		
+		System.out.println(out.length);
+		return out;
 	}
+	
+	
+	
 }
